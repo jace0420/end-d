@@ -66,7 +66,7 @@ export default function CharacterCreator() {
 
   return (
     <div className="creation-container">
-      <h2>Create Your Legend</h2>
+      <h2>Character Creation</h2>
       
       {/* Name & Gender Row */}
       <div className="row">

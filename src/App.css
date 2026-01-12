@@ -1,23 +1,26 @@
-/* src/App.css */
+/* IMPORTS MUSTZW BE AT THE VERY TOP */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;800&display=swap');
 
-/* 1. Import the Celtic Font */
-@importYX url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
-
-/* 2. Global Resets & Variables */
+/* ===========================
+   VARIABLES & GLOBALS
+   =========================== */
 :root {
   --color-bg: #050505;
   --color-gold: #d4af37;
   --color-gold-dim: #8a7326;
   --color-blood: #8a0303;
   --color-blood-bright: #ff1111;
-  --font-celtic: 'Uncial Antiqua', serif;
-  --font-mono: 'Courier New', monospace;
+  
+  /* FONTS */
+  --font-title: 'Cinzel Decorative', serif; /* The Fancy Title */
+  --font-header: 'Cinzel', serif;           /* Headers & Buttons */
+  --font-mono: 'Courier New', monospace;    /* Stats & Inputs */
 }
 
 body {
   background-color: var(--color-bg);
   color: #e0e0e0;
-  font-family: var(--font-mono); /* Default to retro terminal style for stats */
+  font-family: var(--font-header); 
   margin: 0;
   display: flex;
   justify-content: center;
@@ -31,88 +34,277 @@ body {
   max-width: 900px;
   padding: 20px;
   text-align: center;
-  position: relative;
 }
-
-/* src/App.css - Partial Update */
 
 /* ===========================
    MAIN MENU STYLES
    =========================== */
 
-/* The Container - Now invisible, just used for centering */
+/* The Container */
 .menu-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full screen height */
+  height: 85vh;
   width: 100%;
-  background: transparent; /* No more box background */
-  border: none; /* No more box border */
-  box-shadow: none; /* No more box shadow */
 }
 
 /* The Title */
 .title {
-  font-family: var(--font-celtic);
-  font-size: 7rem; /* Made it slightly bigger */
+  font-family: var(--font-title);
+  font-size: 7rem;
   color: var(--color-gold);
   margin: 0;
-  letter-spacing: 5px;
+  line-height: 1;
+  letter-spacing: 2px;
   text-transform: uppercase;
   
-  /* The Epic Glow Effect */
   text-shadow: 
     0 0 10px var(--color-blood), 
-    0 0 20px var(--color-blood), 
-    0 0 40px black;
+    0 0 30px black;
   
-  animation: pulse 3s infinite ease-in-out;
+  animation: pulse 4s infinite ease-in-out;
 }
 
 .subtitle {
-  font-family: var(--font-celtic);
-  font-size: 1.8rem;
-  color: #666; /* Darker grey to fade into the background more */
-  margin-top: -10px;
-  margin-bottom: 80px; /* More space between text and button */
-  letter-spacing: 4px;
+  font-family: var(--font-header);
+  font-size: 1.5rem;
+  color: #666;
+  margin-top: 10px;
+  margin-bottom: 60px;
+  letter-spacing: 8px;
   text-transform: uppercase;
-  opacity: 0.8;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  width: 50%;
 }
 
-/* The Play Button - Now a standalone monolith */
+/* The Play Button */
 .play-btn {
-  font-family: var(--font-celtic);
-  font-size: 2.2rem;
-  background-color: transparent; /* Transparent background */
-  color: var(--color-blood-bright);
-  border: 2px solid var(--color-blood); /* Red border */
+  font-family: var(--font-header);
+  font-size: 2rem;
+  font-weight: 800;
+  background-color: transparent;
+  color: var(--color-blood);
+  border: 3px solid var(--color-blood);
   padding: 20px 80px;
   cursor: pointer;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  
-  /* A subtle glow to make it float */
-  box-shadow: 0 0 20px rgba(138, 3, 3, 0.3);
-  text-shadow: 0 0 5px var(--color-blood);
+  letter-spacing: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
 .play-btn:hover {
   background-color: var(--color-blood);
   color: var(--color-gold);
   border-color: var(--color-gold);
-  box-shadow: 
-    0 0 40px var(--color-blood), 
-    0 0 10px var(--color-gold);
-  transform: translateY(-2px) scale(1.05); /* Slight lift */
+  box-shadow: 0 0 50px rgba(138, 3, 3, 0.4);
+  transform: translateY(-3px);
 }
 
-/* Animation for the Title */
 @keyframes pulse {
   0% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
   50% { text-shadow: 0 0 30px var(--color-blood-bright), 0 0 15px var(--color-gold); opacity: 1; }
   100% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
+}
+
+/* ===========================
+   CHARACTER CREATOR STYLES
+   =========================== */
+
+.creation-container {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(5, 5, 5, 0.95);
+  border: 1px solid var(--color-gold-dim);
+  padding: 40px;
+  box-shadow: 0 0 50px black;
+  text-align: left;
+}
+
+.creation-container h2 {
+  font-family: var(--font-title);
+  font-size: 3rem;
+  color: var(--color-gold);
+  border-bottom: 1px solid var(--color-blood);
+  margin-top: 0;
+  padding-bottom: 20px;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+.creation-container h3 {
+  font-family: var(--font-header);
+  color: var(--color-gold-dim);
+  font-size: 1.4rem;
+  margin-top: 30px;
+  border-bottom: 1px solid #222;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Layouts */
+.row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  font-family: var(--font-header);
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+input, select, textarea {
+  width: 100%;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  color: var(--color-gold);
+  padding: 15px;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-blood);
+  box-shadow: 0 0 15px rgba(138, 3, 3, 0.3);
+  background-color: #110505;
+}
+
+/* Attributes */
+.attributes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  background: #0a0a0a;
+  border: 1px solid #222;
+  padding: 15px;
+  text-align: center;
+}
+
+.stat-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.stat-controls button {
+  background-color: #151515;
+  color: var(--color-gold);
+  border: 1px solid #333;
+  width: 35px;
+  height: 35px;
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-controls button:hover:not(:disabled) {
+  border-color: var(--color-blood);
+  color: var(--color-blood-bright);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: var(--font-header);
+  color: white;
+}
+
+.stat-mod {
+  font-family: var(--font-mono);
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Skills */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #1a1a1a;
+  background-color: #080808;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #777;
+  font-family: var(--font-header);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.skill-item:hover {
+  border-color: #444;
+  color: #ccc;
+}
+
+.skill-item.selected {
+  background-color: #1a0505;
+  border-color: var(--color-blood);
+  color: var(--color-gold);
+}
+
+/* Points Display */
+.points-display {
+  text-align: center;
+  font-family: var(--font-header);
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #333;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Embark Button */
+.submit-btn {
+  width: 100%;
+  margin-top: 40px;
+  padding: 25px;
+  font-family: var(--font-title);
+  font-size: 2rem;
+  background-color: #050505;
+  color: var(--color-blood);
+  border: 2px solid var(--color-blood);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+}
+
+.submit-btn:hover {
+  background-color: var(--color-blood);
+  color: var(--color-gold);
+  box-shadow: 0 0 40px rgba(138, 3, 3, 0.6);
 }
