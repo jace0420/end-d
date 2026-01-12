@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 export default function MainMenu({ onStart }) {
   const containerRef = useRef(null);
@@ -12,11 +12,11 @@ export default function MainMenu({ onStart }) {
       const x = (clientX - centerX) / centerX;
       const y = (clientY - centerY) / centerY;
 
-      containerRef.current.style.setProperty('--mouse-x', x);
-      containerRef.current.style.setProperty('--mouse-y', y);
+      containerRef.current.style.setProperty("--mouse-x", x);
+      containerRef.current.style.setProperty("--mouse-y", y);
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   return (
@@ -31,7 +31,7 @@ export default function MainMenu({ onStart }) {
       {/* Title & Content */}
       <h1 className="title">END&D</h1>
       <p className="subtitle">Endless Dungeons & Dragons</p>
-      
+
       <div className="button-wrapper">
         <button className="play-btn" onClick={onStart}>
           Enter Faerûn

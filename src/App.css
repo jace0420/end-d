@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
 
 /* ===========================
    VARIABLES & GLOBALS
@@ -9,18 +9,36 @@
   --color-gold-dim: #8a7326;
   --color-blood: #8a0303;
   --color-blood-bright: #ff1111;
-  
+
+  /* Layout & Theme */
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --container-max: 1200px;
+  --shadow-soft: 0 8px 40px rgba(0, 0, 0, 0.7);
+
   /* FONTS */
-  --font-title: 'Cinzel Decorative', serif; /* The Fancy Title */
-  --font-header: 'Cinzel', serif;           /* Headers & Buttons */
-  --font-mono: 'Courier New', monospace;    /* Stats & Inputs */
-  --font-body: 'EB Garamond', serif;      /* Main Body Text */
+  --font-title: "Cinzel Decorative", serif; /* The Fancy Title */
+  --font-header: "Cinzel", serif; /* Headers & Buttons */
+  --font-mono: "Courier New", monospace; /* Stats & Inputs */
+  --font-body: "EB Garamond", serif; /* Main Body Text */
+  --frame-gradient: linear-gradient(
+    45deg,
+    rgba(212, 175, 55, 0.9),
+    rgba(138, 70, 20, 0.8)
+  );
+  --frame-accent: linear-gradient(
+    135deg,
+    rgba(255, 200, 120, 0.06),
+    rgba(0, 0, 0, 0.06)
+  );
+  --ornament-color: rgba(212, 175, 55, 0.95);
 }
 
 body {
   background-color: var(--color-bg);
   color: #e0e0e0;
-  font-family: var(--font-header); 
+  font-family: var(--font-header);
   margin: 0;
   display: flex;
   justify-content: center;
@@ -55,15 +73,17 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 100; /* Ensure it sits on top of everything */
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+
   /* --- BACKGROUND IMAGE --- */
   /* Linear gradient adds a 60% dark overlay so text pops */
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/background.png');
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("/background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -72,24 +92,24 @@ body {
 /* The Title */
 .title {
   font-family: var(--font-title);
-  font-size: 7rem;
+  font-size: clamp(3rem, 10vw, 7rem);
   color: var(--color-gold);
   margin: 0;
   line-height: 1;
   letter-spacing: 2px;
   text-transform: uppercase;
   text-align: center; /* Safety center */
-  
-  text-shadow: 
-    0 0 10px var(--color-blood), 
+
+  text-shadow:
+    0 0 10px var(--color-blood),
     0 0 30px black;
-  
+
   animation: pulse 4s infinite ease-in-out;
   z-index: 2; /* Text above background */
-  
+
   /* Parallax */
   transform: translate(
-    calc(var(--mouse-x, 0) * -3px), 
+    calc(var(--mouse-x, 0) * -3px),
     calc(var(--mouse-y, 0) * -3px)
   );
   transition: transform 0.1s ease-out;
@@ -97,24 +117,24 @@ body {
 
 .subtitle {
   font-family: var(--font-header);
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
   color: #ccc;
   margin-top: 10px;
   margin-bottom: 60px;
   letter-spacing: 8px;
   text-transform: uppercase;
-  
+
   /* --- CENTERING FIX --- */
-  width: 100%;       /* Take full width... */
-  max-width: 600px;  /* ...but stop at 600px */
+  width: 100%; /* Take full width... */
+  max-width: 600px; /* ...but stop at 600px */
   text-align: center; /* Center the text inside that box */
-  
+
   border-top: 1px solid #666;
   padding-top: 20px;
-  
+
   /* Parallax */
   transform: translate(
-    calc(var(--mouse-x, 0) * -3px), 
+    calc(var(--mouse-x, 0) * -3px),
     calc(var(--mouse-y, 0) * -3px)
   );
   transition: transform 0.1s ease-out;
@@ -123,11 +143,14 @@ body {
 /* Button Wrapper */
 .button-wrapper {
   transform: translate(
-    calc(var(--mouse-x, 0) * -10px), 
+    calc(var(--mouse-x, 0) * -10px),
     calc(var(--mouse-y, 0) * -10px)
   );
   transition: transform 0.1s ease-out;
   z-index: 10;
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
 }
 
 /* The Play Button - Text Only Version */
@@ -143,22 +166,33 @@ body {
   transition: all 0.4s ease;
   text-transform: uppercase;
   letter-spacing: 6px;
-  text-shadow: 0 0 10px rgba(0,0,0,0.9);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
 }
 
 .play-btn:hover {
   background: none;
   color: var(--color-gold);
-  text-shadow: 
+  text-shadow:
     0 0 20px var(--color-gold),
     0 0 40px var(--color-blood);
   transform: scale(1.1);
 }
 
 @keyframes pulse {
-  0% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
-  50% { text-shadow: 0 0 30px var(--color-blood-bright), 0 0 15px var(--color-gold); opacity: 1; }
-  100% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
+  0% {
+    text-shadow: 0 0 15px var(--color-blood);
+    opacity: 0.9;
+  }
+  50% {
+    text-shadow:
+      0 0 30px var(--color-blood-bright),
+      0 0 15px var(--color-gold);
+    opacity: 1;
+  }
+  100% {
+    text-shadow: 0 0 15px var(--color-blood);
+    opacity: 0.9;
+  }
 }
 
 /* ===========================
@@ -183,15 +217,15 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  
+
   /* Create a soft, irregular cloud shape using gradients */
   background: radial-gradient(
-    ellipse at 50% 50%, 
-    rgba(200, 200, 200, 0.15) 0%, 
-    rgba(100, 100, 100, 0.05) 40%, 
+    ellipse at 50% 50%,
+    rgba(200, 200, 200, 0.15) 0%,
+    rgba(100, 100, 100, 0.05) 40%,
     transparent 70%
   );
-  
+
   filter: blur(40px); /* The magic sauce: blurs the gradient into smoke */
   opacity: 0;
 }
@@ -205,8 +239,8 @@ body {
 /* Layer 2: Faster, offset to the left */
 .fog-2 {
   background: radial-gradient(
-    circle at 30% 50%, 
-    rgba(150, 150, 150, 0.12) 0%, 
+    circle at 30% 50%,
+    rgba(150, 150, 150, 0.12) 0%,
     transparent 60%
   );
   animation: fogRise 12s infinite linear;
@@ -216,8 +250,8 @@ body {
 /* Layer 3: Offset to the right */
 .fog-3 {
   background: radial-gradient(
-    circle at 70% 50%, 
-    rgba(180, 180, 180, 0.1) 0%, 
+    circle at 70% 50%,
+    rgba(180, 180, 180, 0.1) 0%,
     transparent 50%
   );
   animation: fogRise 18s infinite linear;
@@ -241,19 +275,18 @@ body {
   }
 }
 
-/* --- UPDATE Z-INDEX FOR TEXT --- */
-/* We need to make sure text sits ON TOP of the smoke */
+/* Ensure text overlays the fog */
 .title {
-  z-index: 5 !important;
   position: relative;
+  z-index: 5;
 }
 .subtitle {
-  z-index: 5 !important;
   position: relative;
+  z-index: 5;
 }
 .button-wrapper {
-  z-index: 10 !important;
   position: relative;
+  z-index: 10;
 }
 
 /* ===========================
@@ -265,30 +298,37 @@ body {
   max-width: 900px;
   /* Deep Brown/Red background (Leather/Old Paper) */
   background: radial-gradient(circle, #1a1010 0%, #050000 100%);
-  
+
   /* The "Ancient Tablet" Border Effect */
   border: 2px solid var(--color-gold-dim);
   outline: 4px solid #000; /* Gap between borders */
-  box-shadow: 
-    0 0 0 6px var(--color-blood), /* Outer Red Border */
-    0 0 60px rgba(0,0,0,0.9);      /* Deep Drop Shadow */
-    
+  box-shadow:
+    0 0 0 6px var(--color-blood),
+    /* Outer Red Border */ 0 0 60px rgba(0, 0, 0, 0.9); /* Deep Drop Shadow */
+
   padding: 60px;
-  margin-top: 40px auto;
+  margin: 40px auto 0;
   position: relative;
   text-align: left;
 }
 
 /* Decorative Corner Accents (Pseudo-elements) */
-.creation-container::before, .creation-container::after {
+.creation-container::before,
+.creation-container::after {
   content: "❖";
   position: absolute;
   color: var(--color-gold);
   font-size: 2rem;
   font-family: var(--font-title);
 }
-.creation-container::before { top: 10px; left: 15px; }
-.creation-container::after { bottom: 10px; right: 15px; }
+.creation-container::before {
+  top: 10px;
+  left: 15px;
+}
+.creation-container::after {
+  bottom: 10px;
+  right: 15px;
+}
 
 .creation-container h2 {
   font-family: var(--font-title);
@@ -337,43 +377,55 @@ label {
 }
 
 /* INPUTS: The "Handwritten Ledger" Look */
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
-  background-color: transparent; /* No box background */
-  border: none;
-  border-bottom: 2px solid #333; /* Only a bottom line */
+  background-color: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   color: var(--color-gold);
-  padding: 10px 0;
-  font-family: var(--font-header); /* Fancy Font for typing */
-  font-size: 1.3rem;
-  transition: 0.3s;
-  border-radius: 0;
+  padding: 10px 12px;
+  font-family: var(--font-header);
+  font-size: 1.02rem;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s;
+  border-radius: 6px;
 }
 
 /* Dropdown specific fix */
 select {
   cursor: pointer;
   appearance: none; /* Removes default ugly arrow */
-  background-image: linear-gradient(45deg, transparent 50%, var(--color-gold) 50%),
-                    linear-gradient(135deg, var(--color-gold) 50%, transparent 50%);
-  background-position: calc(100% - 20px) calc(1em + 2px),
-                       calc(100% - 15px) calc(1em + 2px);
-  background-size: 5px 5px,
-                   5px 5px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-gold) 50%),
+    linear-gradient(135deg, var(--color-gold) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px);
+  background-size:
+    5px 5px,
+    5px 5px;
   background-repeat: no-repeat;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   outline: none;
   border-bottom-color: var(--color-blood);
-  background: linear-gradient(to bottom, transparent 95%, rgba(138, 3, 3, 0.2) 100%);
+  background: linear-gradient(
+    to bottom,
+    transparent 95%,
+    rgba(138, 3, 3, 0.2) 100%
+  );
 }
 
 /* Attributes Grid - The "Stone Runes" Look */
 .attributes-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 18px;
   margin-bottom: 30px;
 }
 
@@ -383,7 +435,7 @@ input:focus, select:focus, textarea:focus {
   padding: 15px;
   text-align: center;
   position: relative;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .stat-box label {
@@ -403,7 +455,8 @@ input:focus, select:focus, textarea:focus {
   background: none;
   border: 1px solid #444;
   color: #666;
-  width: 30px; height: 30px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   font-family: var(--font-mono);
   transition: 0.2s;
@@ -427,6 +480,710 @@ input:focus, select:focus, textarea:focus {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+}
+.skill-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #777;
+  font-family: var(--font-header);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.18s ease;
+  color: #777;
+  font-family: var(--font-header);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-item:hover {
+  border-color: #555;
+  color: #aaa;
+  transform: translateY(-2px);
+}
+
+.skill-item.selected {
+  background-color: rgba(138, 3, 3, 0.08);
+  border-color: var(--color-blood);
+  color: var(--color-gold);
+  box-shadow: inset 0 0 15px rgba(138, 3, 3, 0.18);
+}
+
+.skill-item.selected::before {
+  content: "♦";
+  position: absolute;
+  left: 10px;
+  color: var(--color-blood);
+  font-size: 1.2rem;
+}
+
+/* Embark Button */
+.submit-btn {
+  width: 100%;
+  margin-top: 50px;
+  padding: 18px 22px;
+  font-family: var(--font-title);
+  font-size: 2rem;
+  background: transparent;
+  color: var(--color-blood-bright);
+  border: 4px double var(--color-blood);
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    transform 0.18s ease,
+    box-shadow 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: var(--color-blood);
+  color: black;
+  box-shadow: 0 0 30px var(--color-blood);
+  transform: translateY(-3px);
+}
+
+/* Dice container control - fade and clear behavior */
+#dice-box {
+  position: relative;
+}
+.dice-container {
+  position: absolute;
+  inset: 0;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+.dice-container.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Notification/overlay polish */
+.notification-overlay {
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.notification-overlay.hide {
+  opacity: 0;
+  transform: translate(-50%, -55%) scale(0.98);
+  pointer-events: none;
+}
+
+.transition-overlay {
+  transition: opacity 0.45s ease;
+}
+
+/* Expanded ornate borders and gradient backgrounds */
+.game-screen,
+.stats-panel,
+.messages-area,
+.input-area,
+.notification-overlay {
+  border-image: linear-gradient(
+      135deg,
+      rgba(200, 160, 70, 0.95),
+      rgba(90, 40, 20, 0.9)
+    )
+    1 round;
+  background-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(10, 8, 6, 0.35)),
+    radial-gradient(
+      circle at 12% 12%,
+      rgba(255, 255, 255, 0.02),
+      transparent 14%
+    );
+  background-blend-mode: overlay, normal;
+}
+
+/* Filigree overlay inside panels */
+.menu-container::after,
+.game-screen::after,
+.stats-panel::after,
+.messages-area::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 6px;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.02) 0 4px,
+    rgba(255, 255, 255, 0.015) 4px 8px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* Restore the main menu background image with a gentle overlay */
+.menu-container {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Ornate edge ring for buttons */
+.submit-btn,
+.game-btn {
+  border-image: conic-gradient(
+      from 180deg at 50% 50%,
+      rgba(212, 175, 55, 0.95),
+      rgba(138, 70, 20, 0.9)
+    )
+    1;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.04)
+  );
+}
+
+/* Decorative inner frame for messages and notifications */
+.messages-area .message,
+.notification-overlay {
+  border-left: 3px solid rgba(212, 175, 55, 0.06);
+  padding: 12px 16px;
+}
+
+/* Textured panel backdrops */
+.stats-panel,
+.messages-area {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 240, 200, 0.01),
+    rgba(0, 0, 0, 0.03)
+  );
+}
+
+/* Small ornament glyph adjustments */
+.game-btn::before,
+.submit-btn::before {
+  font-size: 0.95rem;
+  top: -10px;
+  left: -10px;
+  opacity: 0.95;
+  color: var(--ornament-color);
+}
+.stats-panel::before,
+.menu-container::before {
+  transform: rotate(-8deg);
+}
+
+/* ===========================
+   GAME SCREEN STYLES
+   =========================== */
+
+.game-screen {
+  display: flex;
+  width: 95%;
+  max-width: 1600px;
+  height: 85vh;
+  margin: 20px;
+  background-color: rgba(5, 5, 5, 0.95);
+  border: 2px solid var(--color-gold-dim);
+  box-shadow: 0 0 50px black;
+  overflow: hidden;
+}
+
+.narrative-panel {
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid var(--color-gold-dim);
+  padding: 30px;
+  background-color: #080808;
+}
+.messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+}
+.messages-area::-webkit-scrollbar {
+  width: 8px;
+}
+.messages-area::-webkit-scrollbar-track {
+  background: #000;
+}
+.messages-area::-webkit-scrollbar-thumb {
+  background: #333;
+  border: 1px solid #555;
+}
+
+.message {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+.message.ai,
+.message.system {
+  color: #ccc;
+  text-align: justify;
+}
+.message.user {
+  color: var(--color-gold);
+  border-left: 2px solid var(--color-gold);
+  padding-left: 15px;
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.05) 0%,
+    transparent 100%
+  );
+  margin-left: 20px;
+}
+.user-label {
+  color: var(--color-blood-bright);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  display: block;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.input-area {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #222;
+  padding-top: 20px;
+  max-width: 700px;
+  width: 100%;
+  align-self: center;
+}
+.input-area input {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  padding: 15px;
+  border: 1px solid #333;
+  background: #000;
+  color: var(--color-gold);
+}
+.input-area button {
+  width: 120px;
+  background: var(--color-blood);
+  color: white;
+  border: 1px solid var(--color-blood-bright);
+  font-family: var(--font-header);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.input-area button:hover {
+  background: var(--color-blood-bright);
+  box-shadow: 0 0 15px var(--color-blood);
+}
+
+.stats-panel {
+  flex: 4;
+  background: #0a0a0a;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  overflow-y: auto;
+}
+.char-summary {
+  border-bottom: 1px solid #333;
+  padding-bottom: 15px;
+}
+.char-summary h2 {
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 2.8rem;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+.sub-header {
+  color: #888;
+  font-family: var(--font-header);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.vitals {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.bar-container label {
+  display: flex;
+  justify-content: space-between;
+  color: #aaa;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #111;
+  border: 1px solid #333;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+.bar-fill.hp {
+  background: var(--color-blood);
+  box-shadow: 0 0 10px var(--color-blood);
+}
+.bar-fill.xp {
+  background: var(--color-gold);
+  box-shadow: 0 0 10px var(--color-gold);
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 30px;
+  flex: 1;
+}
+.game-btn {
+  padding: 20px;
+  background: #111;
+  border: 1px solid #333;
+  color: #888;
+  font-family: var(--font-header);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+.game-btn:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: #1a1a1a;
+  transform: translateY(-2px);
+}
+.game-btn.level-up {
+  grid-column: span 2;
+  border: 1px dashed #444;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.game-btn.level-up:not(:disabled) {
+  opacity: 1;
+  border: 2px solid var(--color-gold);
+  background: radial-gradient(circle, #332a00 0%, #000 100%);
+  color: var(--color-gold);
+  text-shadow: 0 0 5px var(--color-gold);
+  animation: glowPulse 2s infinite;
+  cursor: pointer;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px var(--color-gold-dim);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-gold);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--color-gold-dim);
+  }
+}
+
+.mini-stats {
+  background: #080808;
+  padding: 20px;
+  border: 1px solid #222;
+  margin-top: auto;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 8px 0;
+  color: #666;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+.stat-row:last-child {
+  border-bottom: none;
+}
+.stat-row span:first-child {
+  color: #888;
+}
+.stat-row span:last-child {
+  color: var(--color-gold);
+  font-weight: bold;
+}
+
+#dice-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ===========================
+   TRANSITION SCREEN (THE INK CLOUD)
+   =========================== */
+.transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  background: transparent;
+}
+.smoke-puff {
+  position: absolute;
+  border-radius: 50%;
+  background: #000;
+  filter: blur(60px);
+  opacity: 0;
+}
+
+.puff-1 {
+  width: 300px;
+  height: 300px;
+  background: #1a0505; /* Dark Red tint */
+  animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+}
+.puff-2 {
+  width: 400px;
+  height: 400px;
+  background: #000;
+  top: 30%;
+  left: 40%;
+  animation: puffExpand 1.6s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.1s;
+}
+.puff-3 {
+  width: 350px;
+  height: 350px;
+  background: #0a0a0a;
+  bottom: 20%;
+  right: 30%;
+  animation: puffExpand 1.7s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.2s;
+}
+.puff-4 {
+  width: 500px;
+  height: 500px;
+  background: #000;
+  top: 60%;
+  left: 20%;
+  animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.05s;
+}
+.puff-5 {
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: black;
+  z-index: 2;
+  animation: coreExpand 1.8s ease-out forwards;
+}
+
+.loading-text {
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  font-size: 3rem;
+  opacity: 0;
+  z-index: 10;
+  letter-spacing: 5px;
+  text-shadow: 0 0 30px var(--color-blood);
+  animation: textFade 2.5s ease-in-out forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes puffExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(8);
+  }
+}
+@keyframes coreExpand {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(30);
+  }
+}
+@keyframes textFade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ===========================
+   EVENT NOTIFICATIONS (POPUPS)
+   =========================== */
+.notification-overlay {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  pointer-events: none;
+  animation: notifPop 3s ease-out forwards;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 40px 80px;
+  border: 2px solid;
+  box-shadow: 0 0 50px black;
+  border-radius: 8px;
+}
+.notification-overlay.roll {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 30px var(--color-gold-dim);
+}
+.notification-overlay.damage {
+  border-color: var(--color-blood);
+  color: var(--color-blood-bright);
+  box-shadow: 0 0 30px var(--color-blood);
+}
+.notif-icon {
+  text-shadow: 0 0 20px currentColor;
+}
+.notif-label {
+  font-family: var(--font-header);
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.notif-value {
+  font-family: var(--font-title);
+  font-size: 5rem;
+  line-height: 1;
+  text-shadow: 0 0 20px currentColor;
+}
+@keyframes notifPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.8);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+}
+
+.stat-controls button {
+  background: none;
+  border: 1px solid #444;
+  color: #666;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: 0.2s;
+}
+
+.stat-controls button:hover:not(:disabled) {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 10px var(--color-gold-dim);
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Skills - The "Wax Seal" Look */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
 }
 
 .skill-item {
@@ -524,7 +1281,7 @@ input:focus, select:focus, textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  
+
   /* BOOK FORMATTING MAGIC */
   max-width: 700px; /* Never let text get wider than a comfortable book page */
   width: 100%;
@@ -549,7 +1306,8 @@ input:focus, select:focus, textarea:focus {
   line-height: 1.8; /* More spacing between lines for readability */
 }
 
-.message.ai, .message.system {
+.message.ai,
+.message.system {
   color: #ccc;
   text-align: justify; /* Newspaper/Book justification */
 }
@@ -558,7 +1316,11 @@ input:focus, select:focus, textarea:focus {
   color: var(--color-gold);
   border-left: 2px solid var(--color-gold);
   padding-left: 15px;
-  background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.05) 0%,
+    transparent 100%
+  );
   margin-left: 20px;
 }
 
@@ -585,7 +1347,6 @@ input:focus, select:focus, textarea:focus {
 }
 
 .input-area input {
-  
   font-family: var(--font-body);
   font-size: 1.2rem;
   padding: 15px;
@@ -633,7 +1394,7 @@ input:focus, select:focus, textarea:focus {
   margin: 0;
   font-size: 2.8rem;
   line-height: 1;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .sub-header {
@@ -675,8 +1436,14 @@ input:focus, select:focus, textarea:focus {
   transition: width 0.5s ease;
 }
 
-.bar-fill.hp { background: var(--color-blood); box-shadow: 0 0 10px var(--color-blood); }
-.bar-fill.xp { background: var(--color-gold); box-shadow: 0 0 10px var(--color-gold); }
+.bar-fill.hp {
+  background: var(--color-blood);
+  box-shadow: 0 0 10px var(--color-blood);
+}
+.bar-fill.xp {
+  background: var(--color-gold);
+  box-shadow: 0 0 10px var(--color-gold);
+}
 
 /* Buttons */
 .action-grid {
@@ -730,9 +1497,15 @@ input:focus, select:focus, textarea:focus {
 }
 
 @keyframes glowPulse {
-  0% { box-shadow: 0 0 5px var(--color-gold-dim); }
-  50% { box-shadow: 0 0 20px var(--color-gold); }
-  100% { box-shadow: 0 0 5px var(--color-gold-dim); }
+  0% {
+    box-shadow: 0 0 5px var(--color-gold-dim);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-gold);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--color-gold-dim);
+  }
 }
 
 /* Mini Stats Grid */
@@ -799,7 +1572,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 50%;
   background: #000;
   /* High blur creates the 'smoke' texture */
-  filter: blur(60px); 
+  filter: blur(60px);
   opacity: 0;
 }
 
@@ -807,39 +1580,48 @@ input:focus, select:focus, textarea:focus {
 /* They start small in the center and explode outwards */
 
 .puff-1 {
-  width: 300px; height: 300px;
-  background: #1a0505; (Dark Red tint)
-  animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  width: 300px;
+  height: 300px;
+  background: #1a0505;
+  (DarkRedtint)animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
 }
 
 .puff-2 {
-  width: 400px; height: 400px;
+  width: 400px;
+  height: 400px;
   background: #000;
-  top: 30%; left: 40%;
+  top: 30%;
+  left: 40%;
   animation: puffExpand 1.6s cubic-bezier(0.1, 1, 0.1, 1) forwards;
   animation-delay: 0.1s;
 }
 
 .puff-3 {
-  width: 350px; height: 350px;
+  width: 350px;
+  height: 350px;
   background: #0a0a0a;
-  bottom: 20%; right: 30%;
+  bottom: 20%;
+  right: 30%;
   animation: puffExpand 1.7s cubic-bezier(0.1, 1, 0.1, 1) forwards;
   animation-delay: 0.2s;
 }
 
 .puff-4 {
-  width: 500px; height: 500px;
+  width: 500px;
+  height: 500px;
   background: #000;
-  top: 60%; left: 20%;
+  top: 60%;
+  left: 20%;
   animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
   animation-delay: 0.05s;
 }
 
 .puff-5 {
-  width: 100px; height: 100px;
+  width: 100px;
+  height: 100px;
   /* Central core acts as the 'finisher' to ensure total black */
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   background: black;
   z-index: 2;
@@ -875,13 +1657,107 @@ input:focus, select:focus, textarea:focus {
 }
 
 @keyframes coreExpand {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(30); } /* Ensure total coverage */
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(30);
+  } /* Ensure total coverage */
 }
 
 @keyframes textFade {
-  0% { opacity: 0; transform: translateY(20px); }
-  20% { opacity: 1; transform: translateY(0); }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ===========================
+   EVENT NOTIFICATIONS (POPUPS)
+   =========================== */
+
+.notification-overlay {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  pointer-events: none;
+  animation: notifPop 3s ease-out forwards;
+
+  /* Glassy Background */
+  background: rgba(0, 0, 0, 0.85);
+  padding: 40px 80px;
+  border: 2px solid;
+  box-shadow: 0 0 50px black;
+  border-radius: 8px;
+}
+
+.notification-overlay.roll {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 30px var(--color-gold-dim);
+}
+
+.notification-overlay.damage {
+  border-color: var(--color-blood);
+  color: var(--color-blood-bright);
+  box-shadow: 0 0 30px var(--color-blood);
+}
+
+.notif-icon {
+  text-shadow: 0 0 20px currentColor;
+}
+
+.notif-label {
+  font-family: var(--font-header);
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.notif-value {
+  font-family: var(--font-title);
+  font-size: 5rem;
+  line-height: 1;
+  text-shadow: 0 0 20px currentColor;
+}
+
+@keyframes notifPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.8);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
 }

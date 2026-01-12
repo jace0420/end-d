@@ -1,5 +1,5 @@
 // src/components/TransitionScreen.jsx
-import React from 'react';
+import React from "react";
 
 export default function TransitionScreen({ active }) {
   if (!active) return null;
@@ -12,7 +12,7 @@ export default function TransitionScreen({ active }) {
       <div className="smoke-puff puff-3"></div>
       <div className="smoke-puff puff-4"></div>
       <div className="smoke-puff puff-5"></div>
-      
+
       <div className="loading-text">Entering Faerûn...</div>
     </div>
   );

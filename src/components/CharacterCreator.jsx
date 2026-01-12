@@ -1,34 +1,45 @@
 // src/components/CharacterCreator.jsx
-import React, { useState, useEffect } from 'react';
-import { 
-  RACES, CLASSES, ATTRIBUTES, SKILLS, 
-  POINT_BUY_COSTS, RACIAL_BONUSES, HIT_DICE, SKILL_LIMITS, STARTING_EQUIPMENT,
-  getModifier, calculateMaxHP 
-} from '../utils/rules';
+import React, { useState } from "react";
+import {
+  RACES,
+  CLASSES,
+  ATTRIBUTES,
+  SKILLS,
+  POINT_BUY_COSTS,
+  RACIAL_BONUSES,
+  HIT_DICE,
+  SKILL_LIMITS,
+  STARTING_EQUIPMENT,
+  getModifier,
+  calculateMaxHP,
+} from "../utils/rules";
 
 export default function CharacterCreator({ onCharacterComplete }) {
   const [formData, setFormData] = useState({
-    name: '',
-    gender: 'Male',
+    name: "",
+    gender: "Male",
     race: RACES[0],
     class: CLASSES[0],
-    backstory: '',
+    backstory: "",
     attributes: {
-      Strength: 8, Dexterity: 8, Constitution: 8,
-      Intelligence: 8, Wisdom: 8, Charisma: 8
+      Strength: 8,
+      Dexterity: 8,
+      Constitution: 8,
+      Intelligence: 8,
+      Wisdom: 8,
+      Charisma: 8,
     },
-    skills: []
+    skills: [],
   });
 
   const MAX_POINTS = 27;
 
-  useEffect(() => {
-    setFormData(prev => ({ ...prev, skills: [] }));
-  }, [formData.class]);
+  // When class changes, reset selected skills to force re-pick
+  // (Handled synchronously in handleChange to avoid setState-in-effect)
 
   const calculateUsedPoints = () => {
     let total = 0;
-    Object.values(formData.attributes).forEach(score => {
+    Object.values(formData.attributes).forEach((score) => {
       total += POINT_BUY_COSTS[score] || 0;
     });
     return total;
@@ -44,9 +55,20 @@ export default function CharacterCreator({ onCharacterComplete }) {
   const remainingPoints = MAX_POINTS - usedPoints;
   const maxSkills = SKILL_LIMITS[formData.class] || 2;
 
+  const canEmbark =
+    remainingPoints === 0 &&
+    formData.skills.length === maxSkills &&
+    formData.name.trim().length > 0 &&
+    formData.gender.trim().length > 0;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    // If the class changes, clear selected skills
+    if (name === "class") {
+      setFormData((prev) => ({ ...prev, [name]: value, skills: [] }));
+      return;
+    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleAttributeChange = (attr, direction) => {
@@ -57,29 +79,31 @@ export default function CharacterCreator({ onCharacterComplete }) {
 
     const currentCost = POINT_BUY_COSTS[currentBase];
     const nextCost = POINT_BUY_COSTS[nextBase];
-    
+
     if (remainingPoints - (nextCost - currentCost) < 0) return;
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      attributes: { ...prev.attributes, [attr]: nextBase }
+      attributes: { ...prev.attributes, [attr]: nextBase },
     }));
   };
 
   const toggleSkill = (skill) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const isSelected = prev.skills.includes(skill);
       if (!isSelected && prev.skills.length >= maxSkills) return prev;
       const skills = isSelected
-        ? prev.skills.filter(s => s !== skill)
+        ? prev.skills.filter((s) => s !== skill)
         : [...prev.skills, skill];
       return { ...prev, skills };
     });
   };
 
   const handleEmbark = () => {
+    if (!canEmbark) return; // Prevent embarking unless valid
+
     const finalAttributes = {};
-    ATTRIBUTES.forEach(attr => {
+    ATTRIBUTES.forEach((attr) => {
       finalAttributes[attr] = getFinalAttribute(attr);
     });
 
@@ -101,11 +125,11 @@ export default function CharacterCreator({ onCharacterComplete }) {
       backstory: formData.backstory,
       // Logic for inventory: Starter Kit + Class Weapon (Generic Dagger for now)
       inventory: [...STARTING_EQUIPMENT, "Dagger"],
-      gold: 10
+      gold: 10,
     };
 
     // --- DOWNLOAD REMOVED ---
-    
+
     // Proceed to Game
     onCharacterComplete(characterSheet);
   };
@@ -113,13 +137,18 @@ export default function CharacterCreator({ onCharacterComplete }) {
   return (
     <div className="creation-container">
       <h2>Create Character</h2>
-      
+
       <div className="row">
-        <div className="form-group" style={{flex: 2}}>
+        <div className="form-group" style={{ flex: 2 }}>
           <label>Name</label>
-          <input name="name" value={formData.name} onChange={handleChange} placeholder="Enter name..." />
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter name..."
+          />
         </div>
-        <div className="form-group" style={{flex: 1}}>
+        <div className="form-group" style={{ flex: 1 }}>
           <label>Gender</label>
           <select name="gender" value={formData.gender} onChange={handleChange}>
             <option value="Male">Male</option>
@@ -130,26 +159,37 @@ export default function CharacterCreator({ onCharacterComplete }) {
       </div>
 
       <div className="row">
-        <div className="form-group" style={{flex: 1}}>
+        <div className="form-group" style={{ flex: 1 }}>
           <label>Race</label>
           <select name="race" value={formData.race} onChange={handleChange}>
-            {RACES.map(r => <option key={r} value={r}>{r}</option>)}
+            {RACES.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-group" style={{flex: 1}}>
+        <div className="form-group" style={{ flex: 1 }}>
           <label>Class</label>
           <select name="class" value={formData.class} onChange={handleChange}>
-            {CLASSES.map(c => <option key={c} value={c}>{c}</option>)}
+            {CLASSES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
         </div>
       </div>
 
       <div className="attributes-section">
         <div className="points-display">
-          POINTS REMAINING: <span style={{ color: remainingPoints === 0 ? '#d4af37' : '#fff' }}>{remainingPoints}/{MAX_POINTS}</span>
+          POINTS REMAINING:{" "}
+          <span style={{ color: remainingPoints === 0 ? "#d4af37" : "#fff" }}>
+            {remainingPoints}/{MAX_POINTS}
+          </span>
         </div>
         <div className="attributes-grid">
-          {ATTRIBUTES.map(attr => {
+          {ATTRIBUTES.map((attr) => {
             const base = formData.attributes[attr];
             const final = getFinalAttribute(attr);
             const mod = getModifier(final);
@@ -157,9 +197,19 @@ export default function CharacterCreator({ onCharacterComplete }) {
               <div key={attr} className="stat-box">
                 <label>{attr.toUpperCase()}</label>
                 <div className="stat-controls">
-                  <button onClick={() => handleAttributeChange(attr, -1)} disabled={base <= 8}>-</button>
+                  <button
+                    onClick={() => handleAttributeChange(attr, -1)}
+                    disabled={base <= 8}
+                  >
+                    -
+                  </button>
                   <span className="stat-value">{final}</span>
-                  <button onClick={() => handleAttributeChange(attr, 1)} disabled={base >= 15}>+</button>
+                  <button
+                    onClick={() => handleAttributeChange(attr, 1)}
+                    disabled={base >= 15}
+                  >
+                    +
+                  </button>
                 </div>
                 <div className="stat-mod">{mod >= 0 ? `+${mod}` : mod}</div>
               </div>
@@ -169,12 +219,14 @@ export default function CharacterCreator({ onCharacterComplete }) {
       </div>
 
       <div className="skills-section">
-        <h3>Skills (Selected {formData.skills.length}/{maxSkills})</h3>
+        <h3>
+          Skills (Selected {formData.skills.length}/{maxSkills})
+        </h3>
         <div className="skills-grid">
-          {SKILLS.map(skill => (
-            <div 
-              key={skill} 
-              className={`skill-item ${formData.skills.includes(skill) ? 'selected' : ''}`}
+          {SKILLS.map((skill) => (
+            <div
+              key={skill}
+              className={`skill-item ${formData.skills.includes(skill) ? "selected" : ""}`}
               onClick={() => toggleSkill(skill)}
             >
               {skill}
@@ -183,12 +235,26 @@ export default function CharacterCreator({ onCharacterComplete }) {
         </div>
       </div>
 
-      <div className="form-group" style={{marginTop: '20px'}}>
+      <div className="form-group" style={{ marginTop: "20px" }}>
         <label>Backstory</label>
-        <textarea name="backstory" rows="5" value={formData.backstory} onChange={handleChange} placeholder="Who are you?" />
+        <textarea
+          name="backstory"
+          rows="5"
+          value={formData.backstory}
+          onChange={handleChange}
+          placeholder="Who are you?"
+        />
       </div>
 
-      <button className="submit-btn" onClick={handleEmbark}>
+      <button
+        className="submit-btn"
+        onClick={handleEmbark}
+        disabled={!canEmbark}
+        style={{
+          opacity: canEmbark ? 1 : 0.5,
+          cursor: canEmbark ? "pointer" : "not-allowed",
+        }}
+      >
         EMBARK
       </button>
     </div>
