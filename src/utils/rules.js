@@ -24,6 +24,14 @@ export const SKILLS = [
   "Stealth", "Survival"
 ];
 
+export const STARTING_EQUIPMENT = [
+  "Backpack", 
+  "Bedroll", 
+  "Rations (5 days)", 
+  "Waterskin", 
+  "Torches (10)"
+];
+
 // Point Buy Costs
 export const POINT_BUY_COSTS = {
   8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9
@@ -66,3 +74,4 @@ export const calculateMaxHP = (charClass, conScore) => {
   const conMod = getModifier(conScore);
   return Math.max(1, hitDie + conMod); 
 };
+

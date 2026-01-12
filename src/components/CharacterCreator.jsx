@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   RACES, CLASSES, ATTRIBUTES, SKILLS, 
-  POINT_BUY_COSTS, RACIAL_BONUSES, HIT_DICE, SKILL_LIMITS,
+  POINT_BUY_COSTS, RACIAL_BONUSES, HIT_DICE, SKILL_LIMITS, STARTING_EQUIPMENT,
   getModifier, calculateMaxHP 
 } from '../utils/rules';
 
@@ -106,7 +106,7 @@ export default function CharacterCreator({ onCharacterComplete }) {
       attributes: finalAttributes,
       skills: formData.skills,
       backstory: formData.backstory,
-      inventory: ["Backpack", "Rations (5)", "Waterskin", "Dagger"],
+      inventory: [STARTING_EQUIPMENT, "Dagger"],
       gold: 10
     };
 
