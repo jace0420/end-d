@@ -1,12 +1,13 @@
 // src/components/GameScreen.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import { triggerRoll } from './DiceRoller'; // <--- 1. Import this
 
 export default function GameScreen({ character }) {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
     { 
       role: 'system', 
-      text: `Welcome, ${character.name}. You stand at the threshold of adventure. The world awaits your command.` 
+      text: `Welcome, ${character.name}. You stand at the threshold of adventure.` 
     }
   ]);
 
@@ -22,18 +23,29 @@ export default function GameScreen({ character }) {
       setHistory(newHistory);
       setInput('');
       
+      // Placeholder AI response
       setTimeout(() => {
         setHistory(prev => [...prev, { 
           role: 'ai', 
-          text: "The Dungeon Master hears you, but is currently silent. (AI Connection Pending...)" 
+          text: "The Dungeon Master hears you..." 
         }]);
       }, 1000);
     }
   };
 
+  // 2. Helper for the Dice Button
+  const handleDiceRoll = () => {
+    triggerRoll('1d20', (total) => {
+      setHistory(prev => [...prev, { 
+        role: 'system', 
+        text: `🎲 You rolled a ${total}!` 
+      }]);
+    });
+  };
+
   return (
     <div className="game-screen">
-      {/* LEFT PANEL: Narrative */}
+      {/* LEFT PANEL */}
       <div className="narrative-panel">
         <div className="messages-area">
           {history.map((msg, index) => (
@@ -63,14 +75,13 @@ export default function GameScreen({ character }) {
         </div>
       </div>
 
-      {/* RIGHT PANEL: Stats & Actions */}
+      {/* RIGHT PANEL */}
       <div className="stats-panel">
         <div className="char-summary">
           <h2>{character.name}</h2>
           <div className="sub-header">{character.race} {character.class} • Lvl {character.level}</div>
         </div>
 
-        {/* Vital Bars */}
         <div className="vitals">
           <div className="bar-container">
             <label><span>HP</span> <span>{character.hp}/{character.maxHP}</span></label>
@@ -87,7 +98,6 @@ export default function GameScreen({ character }) {
           </div>
         </div>
 
-        {/* Action Grid (Now with RA Icons) */}
         <div className="action-grid">
           <button className="game-btn" onClick={() => alert("Map System Not Implemented")}>
             <i className="ra ra-compass ra-3x"></i>
@@ -95,20 +105,26 @@ export default function GameScreen({ character }) {
           </button>
           
           <button className="game-btn" onClick={() => alert("Looking around...")}>
-            <i className="ra ra-eyeball ra-3x"></i>
+            <i className="ra ra-telescope ra-3x"></i>
             Look Around
           </button>
           
           <button className="game-btn" onClick={() => alert("Opening Inventory...")}>
-            <i className="ra ra-kettlebell ra-3x"></i>
+            <i className="ra ra-gold-bar ra-3x"></i>
             Inventory
+          </button>
+
+          {/* THE NEW BUTTON FILLING THE GAP */}
+          <button className="game-btn" onClick={handleDiceRoll}>
+            <i className="ra ra-dice-six ra-3x"></i>
+            Roll Dice
           </button>
 
           <button 
             className="game-btn level-up" 
             disabled={character.xp < character.xpToNextLevel}
           >
-            <i className="ra ra-crystal-ball ra-3x"></i>
+            <i className="ra ra-forward ra-3x"></i>
             Level Up
           </button>
         </div>

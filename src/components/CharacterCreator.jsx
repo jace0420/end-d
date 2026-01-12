@@ -1,3 +1,4 @@
+// src/components/CharacterCreator.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   RACES, CLASSES, ATTRIBUTES, SKILLS, 
@@ -21,12 +22,10 @@ export default function CharacterCreator({ onCharacterComplete }) {
 
   const MAX_POINTS = 27;
 
-  // Clear skills if class changes (because the limit might change)
   useEffect(() => {
     setFormData(prev => ({ ...prev, skills: [] }));
   }, [formData.class]);
 
-  // --- MATH HELPERS ---
   const calculateUsedPoints = () => {
     let total = 0;
     Object.values(formData.attributes).forEach(score => {
@@ -43,9 +42,8 @@ export default function CharacterCreator({ onCharacterComplete }) {
 
   const usedPoints = calculateUsedPoints();
   const remainingPoints = MAX_POINTS - usedPoints;
-  const maxSkills = SKILL_LIMITS[formData.class] || 2; // Logic check
+  const maxSkills = SKILL_LIMITS[formData.class] || 2;
 
-  // --- HANDLERS ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -71,12 +69,7 @@ export default function CharacterCreator({ onCharacterComplete }) {
   const toggleSkill = (skill) => {
     setFormData(prev => {
       const isSelected = prev.skills.includes(skill);
-      
-      // If adding a skill, check limit
-      if (!isSelected && prev.skills.length >= maxSkills) {
-        return prev; // Do nothing if limit reached
-      }
-
+      if (!isSelected && prev.skills.length >= maxSkills) return prev;
       const skills = isSelected
         ? prev.skills.filter(s => s !== skill)
         : [...prev.skills, skill];
@@ -106,19 +99,14 @@ export default function CharacterCreator({ onCharacterComplete }) {
       attributes: finalAttributes,
       skills: formData.skills,
       backstory: formData.backstory,
-      inventory: [STARTING_EQUIPMENT, "Dagger"],
+      // Logic for inventory: Starter Kit + Class Weapon (Generic Dagger for now)
+      inventory: [...STARTING_EQUIPMENT, "Dagger"],
       gold: 10
     };
 
-    // Download Backup
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(characterSheet, null, 2));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", `${characterSheet.name.replace(" ", "_")}_sheet.json`);
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-
+    // --- DOWNLOAD REMOVED ---
+    
+    // Proceed to Game
     onCharacterComplete(characterSheet);
   };
 

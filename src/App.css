@@ -656,3 +656,12 @@ input:focus, select:focus, textarea:focus {
   color: var(--color-gold);
   font-weight: bold;
 }
+
+/* FORCE DICE TO FULL SCREEN */
+#dice-box canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

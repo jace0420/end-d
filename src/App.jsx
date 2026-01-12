@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import MainMenu from './components/MainMenu';
 import CharacterCreator from './components/CharacterCreator';
-import GameScreen from './components/GameScreen'; // <--- IMPORT THIS
+import GameScreen from './components/GameScreen';
+import DiceRoller from './components/DiceRoller';
 import './App.css';
 
 function App() {
@@ -19,6 +20,9 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* The Dice Overlay - Always active but invisible until triggered */}
+      <DiceRoller /> 
+
       {screen === 'menu' && (
         <MainMenu onStart={startCreation} />
       )}
@@ -27,7 +31,6 @@ function App() {
         <CharacterCreator onCharacterComplete={finishCreation} />
       )}
 
-      {/* RENDER GAME SCREEN */}
       {screen === 'game' && character && (
         <GameScreen character={character} />
       )}

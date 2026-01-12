@@ -74,4 +74,3 @@ export const calculateMaxHP = (charClass, conScore) => {
   const conMod = getModifier(conScore);
   return Math.max(1, hitDie + conMod); 
 };
-
