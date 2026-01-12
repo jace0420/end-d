@@ -40,17 +40,18 @@ body {
    MAIN MENU STYLES
    =========================== */
 
-/* The Container */
 .menu-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 85vh;
+  height: 100vh;
   width: 100%;
+  position: relative;
+  overflow: hidden; /* Prevents scrollbars if parallax moves things off screen */
 }
 
-/* The Title */
+/* The Title - Moves SLOWLY (Deep Background feel) */
 .title {
   font-family: var(--font-title);
   font-size: 7rem;
@@ -60,11 +61,20 @@ body {
   letter-spacing: 2px;
   text-transform: uppercase;
   
+  /* The Magic: Calc moves it based on mouse position */
+  /* 20px is the 'Max Distance' it can move */
+  transform: translate(
+    calc(var(--mouse-x, 0) * -5px), 
+    calc(var(--mouse-y, 0) * -5px)
+  );
+  transition: transform 0.1s ease-out; /* Smooths the movement */
+  
   text-shadow: 
     0 0 10px var(--color-blood), 
     0 0 30px black;
   
   animation: pulse 4s infinite ease-in-out;
+  z-index: 1; /* Behind the button */
 }
 
 .subtitle {
@@ -78,31 +88,48 @@ body {
   border-top: 1px solid #333;
   padding-top: 20px;
   width: 50%;
+  
+  /* Subtitle moves slightly differently for depth */
+  transform: translate(
+    calc(var(--mouse-x, 0) * -5px), 
+    calc(var(--mouse-y, 0) * -5px)
+  );
+  transition: transform 0.1s ease-out;
 }
 
-/* The Play Button */
+/* Button Wrapper - Moves FAST (Foreground feel) */
+.button-wrapper {
+  transform: translate(
+    calc(var(--mouse-x, 0) * -15px), 
+    calc(var(--mouse-y, 0) * -5px)
+  );
+  transition: transform 0.1s ease-out;
+  z-index: 10; /* In front of everything */
+}
+
+/* The Play Button Itself */
 .play-btn {
   font-family: var(--font-header);
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 800;
-  background-color: transparent;
+  background: none;
+  border: none;
   color: var(--color-blood);
-  border: 3px solid var(--color-blood);
-  padding: 20px 80px;
+  padding: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease; /* Only handles hover effects now */
   text-transform: uppercase;
-  letter-spacing: 4px;
-  position: relative;
-  overflow: hidden;
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.9);
 }
 
 .play-btn:hover {
-  background-color: var(--color-blood);
+  background: none;
   color: var(--color-gold);
-  border-color: var(--color-gold);
-  box-shadow: 0 0 50px rgba(138, 3, 3, 0.4);
-  transform: translateY(-3px);
+  text-shadow: 
+    0 0 20px var(--color-gold),
+    0 0 40px var(--color-blood);
+  transform: scale(1.1); /* Hover grows the button */
 }
 
 @keyframes pulse {
@@ -111,83 +138,122 @@ body {
   100% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
 }
 
+/* src/App.css - Character Creator Section */
+
 /* ===========================
    CHARACTER CREATOR STYLES
    =========================== */
 
 .creation-container {
   width: 100%;
-  max-width: 800px;
-  background-color: rgba(5, 5, 5, 0.95);
-  border: 1px solid var(--color-gold-dim);
-  padding: 40px;
-  box-shadow: 0 0 50px black;
+  max-width: 900px;
+  /* Deep Brown/Red background (Leather/Old Paper) */
+  background: radial-gradient(circle, #1a1010 0%, #050000 100%);
+  
+  /* The "Ancient Tablet" Border Effect */
+  border: 2px solid var(--color-gold-dim);
+  outline: 4px solid #000; /* Gap between borders */
+  box-shadow: 
+    0 0 0 6px var(--color-blood), /* Outer Red Border */
+    0 0 60px rgba(0,0,0,0.9);      /* Deep Drop Shadow */
+    
+  padding: 60px;
+  margin-top: 40px;
+  position: relative;
   text-align: left;
 }
 
+/* Decorative Corner Accents (Pseudo-elements) */
+.creation-container::before, .creation-container::after {
+  content: "❖";
+  position: absolute;
+  color: var(--color-gold);
+  font-size: 2rem;
+  font-family: var(--font-title);
+}
+.creation-container::before { top: 10px; left: 15px; }
+.creation-container::after { bottom: 10px; right: 15px; }
+
 .creation-container h2 {
   font-family: var(--font-title);
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: var(--color-gold);
-  border-bottom: 1px solid var(--color-blood);
+  border-bottom: 2px solid var(--color-blood);
   margin-top: 0;
   padding-bottom: 20px;
   text-align: center;
-  text-shadow: 0 0 20px rgba(0,0,0,0.8);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 0 4px 10px black;
 }
 
 .creation-container h3 {
   font-family: var(--font-header);
   color: var(--color-gold-dim);
-  font-size: 1.4rem;
-  margin-top: 30px;
-  border-bottom: 1px solid #222;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 1.6rem;
+  margin-top: 40px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
 }
 
 /* Layouts */
 .row {
   display: flex;
-  gap: 30px;
-  margin-bottom: 25px;
+  gap: 40px;
+  margin-bottom: 30px;
+  align-items: flex-end; /* Aligns inputs to the bottom of text */
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  position: relative;
 }
 
 label {
   display: block;
   font-family: var(--font-header);
-  font-weight: 600;
+  font-weight: bold;
   color: #888;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
+  margin-bottom: 5px;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
-/* Inputs */
+/* INPUTS: The "Handwritten Ledger" Look */
 input, select, textarea {
   width: 100%;
-  background-color: #0a0a0a;
-  border: 1px solid #333;
+  background-color: transparent; /* No box background */
+  border: none;
+  border-bottom: 2px solid #333; /* Only a bottom line */
   color: var(--color-gold);
-  padding: 15px;
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
+  padding: 10px 0;
+  font-family: var(--font-header); /* Fancy Font for typing */
+  font-size: 1.3rem;
   transition: 0.3s;
+  border-radius: 0;
+}
+
+/* Dropdown specific fix */
+select {
+  cursor: pointer;
+  appearance: none; /* Removes default ugly arrow */
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-gold) 50%),
+                    linear-gradient(135deg, var(--color-gold) 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+                       calc(100% - 15px) calc(1em + 2px);
+  background-size: 5px 5px,
+                   5px 5px;
+  background-repeat: no-repeat;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--color-blood);
-  box-shadow: 0 0 15px rgba(138, 3, 3, 0.3);
-  background-color: #110505;
+  border-bottom-color: var(--color-blood);
+  background: linear-gradient(to bottom, transparent 95%, rgba(138, 3, 3, 0.2) 100%);
 }
 
-/* Attributes */
+/* Attributes Grid - The "Stone Runes" Look */
 .attributes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -196,10 +262,18 @@ input:focus, select:focus, textarea:focus {
 }
 
 .stat-box {
-  background: #0a0a0a;
-  border: 1px solid #222;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #333;
   padding: 15px;
   text-align: center;
+  position: relative;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+.stat-box label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
 .stat-controls {
@@ -207,96 +281,87 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin: 10px 0;
 }
 
 .stat-controls button {
-  background-color: #151515;
-  color: var(--color-gold);
-  border: 1px solid #333;
-  width: 35px;
-  height: 35px;
-  font-family: var(--font-mono);
-  font-size: 1.2rem;
+  background: none;
+  border: 1px solid #444;
+  color: #666;
+  width: 30px; height: 30px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-family: var(--font-mono);
+  transition: 0.2s;
 }
 
 .stat-controls button:hover:not(:disabled) {
-  border-color: var(--color-blood);
-  color: var(--color-blood-bright);
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: 0 0 10px var(--color-gold-dim);
 }
 
 .stat-value {
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: var(--font-header);
-  color: white;
+  font-size: 2.5rem;
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
-.stat-mod {
-  font-family: var(--font-mono);
-  color: #555;
-  font-size: 0.9rem;
-}
-
-/* Skills */
+/* Skills - The "Wax Seal" Look */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 15px;
 }
 
 .skill-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center; /* Center text */
   padding: 12px;
-  border: 1px solid #1a1a1a;
-  background-color: #080808;
+  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
   color: #777;
   font-family: var(--font-header);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .skill-item:hover {
-  border-color: #444;
-  color: #ccc;
+  border-color: #555;
+  color: #aaa;
 }
 
+/* Selected Skill - Glowing Red Seal */
 .skill-item.selected {
-  background-color: #1a0505;
+  background-color: rgba(138, 3, 3, 0.1);
   border-color: var(--color-blood);
   color: var(--color-gold);
+  box-shadow: inset 0 0 15px rgba(138, 3, 3, 0.3);
 }
 
-/* Points Display */
-.points-display {
-  text-align: center;
-  font-family: var(--font-header);
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #333;
-  color: #aaa;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.skill-item.selected::before {
+  content: "♦";
+  position: absolute;
+  left: 10px;
+  color: var(--color-blood);
+  font-size: 1.2rem;
 }
 
 /* Embark Button */
 .submit-btn {
   width: 100%;
-  margin-top: 40px;
-  padding: 25px;
+  margin-top: 50px;
+  padding: 20px;
   font-family: var(--font-title);
-  font-size: 2rem;
-  background-color: #050505;
-  color: var(--color-blood);
-  border: 2px solid var(--color-blood);
+  font-size: 2.5rem;
+  background: transparent;
+  color: var(--color-blood-bright);
+  border: 4px double var(--color-blood); /* Double border for epicness */
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
@@ -305,6 +370,7 @@ input:focus, select:focus, textarea:focus {
 
 .submit-btn:hover {
   background-color: var(--color-blood);
-  color: var(--color-gold);
-  box-shadow: 0 0 40px rgba(138, 3, 3, 0.6);
+  color: black;
+  box-shadow: 0 0 50px var(--color-blood);
+  transform: translateY(-2px);
 }
