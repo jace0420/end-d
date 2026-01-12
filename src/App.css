@@ -1,0 +1,76 @@
+/* Add these to the bottom of App.css */
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.stat-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.stat-controls button {
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  cursor: pointer;
+}
+
+.stat-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  width: 30px;
+}
+
+.stat-mod {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.points-display {
+  background-color: #222;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+  font-weight: bold;
+}
+
+/* Skills Grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid transparent;
+}
+
+.skill-item:hover {
+  background-color: #1e1e1e;
+}
+
+.skill-item.selected {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  color: #81c784; /* Light green for selected */
+}
