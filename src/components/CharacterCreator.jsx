@@ -112,7 +112,7 @@ export default function CharacterCreator({ onCharacterComplete }) {
 
   return (
     <div className="creation-container">
-      <h2>Create Your Legend</h2>
+      <h2>Create Character</h2>
       
       <div className="row">
         <div className="form-group" style={{flex: 2}}>

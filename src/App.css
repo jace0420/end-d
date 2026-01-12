@@ -47,18 +47,29 @@ body {
    MAIN MENU STYLES
    =========================== */
 
+/* The Container - Now Forced Full Screen */
 .menu-container {
+  position: fixed; /* Break out of the App Container */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100; /* Ensure it sits on top of everything */
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100%;
-  position: relative;
-  overflow: hidden; /* Prevents scrollbars if parallax moves things off screen */
+  
+  /* --- BACKGROUND IMAGE --- */
+  /* Linear gradient adds a 60% dark overlay so text pops */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* The Title - Moves SLOWLY (Deep Background feel) */
+/* The Title */
 .title {
   font-family: var(--font-title);
   font-size: 7rem;
@@ -67,54 +78,59 @@ body {
   line-height: 1;
   letter-spacing: 2px;
   text-transform: uppercase;
-  
-  /* The Magic: Calc moves it based on mouse position */
-  /* 20px is the 'Max Distance' it can move */
-  transform: translate(
-    calc(var(--mouse-x, 0) * -5px), 
-    calc(var(--mouse-y, 0) * -5px)
-  );
-  transition: transform 0.1s ease-out; /* Smooths the movement */
+  text-align: center; /* Safety center */
   
   text-shadow: 
     0 0 10px var(--color-blood), 
     0 0 30px black;
   
   animation: pulse 4s infinite ease-in-out;
-  z-index: 1; /* Behind the button */
+  z-index: 2; /* Text above background */
+  
+  /* Parallax */
+  transform: translate(
+    calc(var(--mouse-x, 0) * -3px), 
+    calc(var(--mouse-y, 0) * -3px)
+  );
+  transition: transform 0.1s ease-out;
 }
 
 .subtitle {
   font-family: var(--font-header);
-  font-size: 1.5rem;
-  color: #666;
+  font-size: 1rem;
+  color: #ccc;
   margin-top: 10px;
   margin-bottom: 60px;
   letter-spacing: 8px;
   text-transform: uppercase;
-  border-top: 1px solid #333;
-  padding-top: 20px;
-  width: 50%;
   
-  /* Subtitle moves slightly differently for depth */
+  /* --- CENTERING FIX --- */
+  width: 100%;       /* Take full width... */
+  max-width: 600px;  /* ...but stop at 600px */
+  text-align: center; /* Center the text inside that box */
+  
+  border-top: 1px solid #666;
+  padding-top: 20px;
+  
+  /* Parallax */
   transform: translate(
-    calc(var(--mouse-x, 0) * -5px), 
-    calc(var(--mouse-y, 0) * -5px)
+    calc(var(--mouse-x, 0) * -3px), 
+    calc(var(--mouse-y, 0) * -3px)
   );
   transition: transform 0.1s ease-out;
 }
 
-/* Button Wrapper - Moves FAST (Foreground feel) */
+/* Button Wrapper */
 .button-wrapper {
   transform: translate(
-    calc(var(--mouse-x, 0) * -20px), 
-    calc(var(--mouse-y, 0) * -20px)
+    calc(var(--mouse-x, 0) * -10px), 
+    calc(var(--mouse-y, 0) * -10px)
   );
   transition: transform 0.1s ease-out;
-  z-index: 10; /* In front of everything */
+  z-index: 10;
 }
 
-/* The Play Button Itself */
+/* The Play Button - Text Only Version */
 .play-btn {
   font-family: var(--font-header);
   font-size: 2.5rem;
@@ -124,7 +140,7 @@ body {
   color: var(--color-blood);
   padding: 20px;
   cursor: pointer;
-  transition: all 0.4s ease; /* Only handles hover effects now */
+  transition: all 0.4s ease;
   text-transform: uppercase;
   letter-spacing: 6px;
   text-shadow: 0 0 10px rgba(0,0,0,0.9);
@@ -136,7 +152,7 @@ body {
   text-shadow: 
     0 0 20px var(--color-gold),
     0 0 40px var(--color-blood);
-  transform: scale(1.1); /* Hover grows the button */
+  transform: scale(1.1);
 }
 
 @keyframes pulse {
@@ -145,7 +161,100 @@ body {
   100% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
 }
 
-/* src/App.css - Character Creator Section */
+/* ===========================
+   FOG / SMOKE ANIMATION
+   =========================== */
+
+.fog-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 1; /* Above background image, below Text */
+}
+
+/* The Base Smoke Blob */
+.fog-layer {
+  position: absolute;
+  bottom: -20%; /* Start below screen */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* Create a soft, irregular cloud shape using gradients */
+  background: radial-gradient(
+    ellipse at 50% 50%, 
+    rgba(200, 200, 200, 0.15) 0%, 
+    rgba(100, 100, 100, 0.05) 40%, 
+    transparent 70%
+  );
+  
+  filter: blur(40px); /* The magic sauce: blurs the gradient into smoke */
+  opacity: 0;
+}
+
+/* Layer 1: Slow, big, central */
+.fog-1 {
+  animation: fogRise 15s infinite linear;
+  transform-origin: center;
+}
+
+/* Layer 2: Faster, offset to the left */
+.fog-2 {
+  background: radial-gradient(
+    circle at 30% 50%, 
+    rgba(150, 150, 150, 0.12) 0%, 
+    transparent 60%
+  );
+  animation: fogRise 12s infinite linear;
+  animation-delay: -5s; /* Start halfway through */
+}
+
+/* Layer 3: Offset to the right */
+.fog-3 {
+  background: radial-gradient(
+    circle at 70% 50%, 
+    rgba(180, 180, 180, 0.1) 0%, 
+    transparent 50%
+  );
+  animation: fogRise 18s infinite linear;
+  animation-delay: -9s;
+}
+
+@keyframes fogRise {
+  0% {
+    transform: translateY(40%) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.4; /* Fade in */
+  }
+  80% {
+    opacity: 0.2; /* Start fading out */
+  }
+  100% {
+    transform: translateY(-40%) scale(1.5); /* Move Up and Grow */
+    opacity: 0;
+  }
+}
+
+/* --- UPDATE Z-INDEX FOR TEXT --- */
+/* We need to make sure text sits ON TOP of the smoke */
+.title {
+  z-index: 5 !important;
+  position: relative;
+}
+.subtitle {
+  z-index: 5 !important;
+  position: relative;
+}
+.button-wrapper {
+  z-index: 10 !important;
+  position: relative;
+}
 
 /* ===========================
    CHARACTER CREATOR STYLES
@@ -664,4 +773,115 @@ input:focus, select:focus, textarea:focus {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+/* ===========================
+   TRANSITION SCREEN (THE INK CLOUD)
+   =========================== */
+
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  /* We remove the background color here so we only see the puffs */
+  background: transparent;
+}
+
+.smoke-puff {
+  position: absolute;
+  border-radius: 50%;
+  background: #000;
+  /* High blur creates the 'smoke' texture */
+  filter: blur(60px); 
+  opacity: 0;
+}
+
+/* Individual Puff Behavior */
+/* They start small in the center and explode outwards */
+
+.puff-1 {
+  width: 300px; height: 300px;
+  background: #1a0505; (Dark Red tint)
+  animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+}
+
+.puff-2 {
+  width: 400px; height: 400px;
+  background: #000;
+  top: 30%; left: 40%;
+  animation: puffExpand 1.6s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+.puff-3 {
+  width: 350px; height: 350px;
+  background: #0a0a0a;
+  bottom: 20%; right: 30%;
+  animation: puffExpand 1.7s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.2s;
+}
+
+.puff-4 {
+  width: 500px; height: 500px;
+  background: #000;
+  top: 60%; left: 20%;
+  animation: puffExpand 1.5s cubic-bezier(0.1, 1, 0.1, 1) forwards;
+  animation-delay: 0.05s;
+}
+
+.puff-5 {
+  width: 100px; height: 100px;
+  /* Central core acts as the 'finisher' to ensure total black */
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: black;
+  z-index: 2;
+  animation: coreExpand 1.8s ease-out forwards;
+}
+
+.loading-text {
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  font-size: 3rem;
+  opacity: 0;
+  z-index: 10;
+  letter-spacing: 5px;
+  text-shadow: 0 0 30px var(--color-blood);
+  animation: textFade 2.5s ease-in-out forwards;
+  animation-delay: 0.3s; /* Wait for smoke to fill before showing text */
+}
+
+/* ANIMATIONS */
+
+@keyframes puffExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  10% {
+    opacity: 1; /* Turn on quickly */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(8); /* Massive expansion to cover screen */
+  }
+}
+
+@keyframes coreExpand {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(30); } /* Ensure total coverage */
+}
+
+@keyframes textFade {
+  0% { opacity: 0; transform: translateY(20px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
 }
