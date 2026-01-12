@@ -66,6 +66,27 @@ export const SKILL_LIMITS = {
   "Warlock": 2, "Wizard": 2
 };
 
+export const SKILL_MAP = {
+  "Acrobatics": "Dexterity",
+  "Animal Handling": "Wisdom",
+  "Arcana": "Intelligence",
+  "Athletics": "Strength",
+  "Deception": "Charisma",
+  "History": "Intelligence",
+  "Insight": "Wisdom",
+  "Intimidation": "Charisma",
+  "Investigation": "Intelligence",
+  "Medicine": "Wisdom",
+  "Nature": "Intelligence",
+  "Perception": "Wisdom",
+  "Performance": "Charisma",
+  "Persuasion": "Charisma",
+  "Religion": "Intelligence",
+  "Sleight of Hand": "Dexterity",
+  "Stealth": "Dexterity",
+  "Survival": "Wisdom"
+};
+
 // Math Helpers
 export const getModifier = (score) => Math.floor((score - 10) / 2);
 
