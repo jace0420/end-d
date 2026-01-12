@@ -1761,3 +1761,422 @@ textarea:focus {
     transform: translate(-50%, -60%);
   }
 }
+
+/* ===========================
+   WORLD MAP OVERLAY
+   =========================== */
+
+.map-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5000; /* Below transition, above game */
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  animation: mapFadeIn 0.5s ease-out forwards;
+}
+
+.map-ui-header {
+  height: 80px;
+  background: #111;
+  border-bottom: 2px solid var(--color-gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+
+.map-ui-header h2 {
+  font-family: var(--font-title);
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 2.5rem;
+  letter-spacing: 5px;
+}
+
+.close-map-btn {
+  background: transparent;
+  border: 1px solid var(--color-blood);
+  color: var(--color-blood-bright);
+  font-family: var(--font-header);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-map-btn:hover {
+  background: var(--color-blood);
+  color: black;
+}
+
+/* The "Window" you look through */
+.map-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden; /* Hide the parts of the map that stick out */
+  cursor: grab;
+  background: #1a1a1a;
+}
+
+/* The actual big map content */
+.map-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* No width/height set here, it grows with the image */
+  transition: transform 0.05s linear; /* Smooth drag */
+}
+
+.world-map-image {
+  /* Prevent blue highlight when dragging */
+  user-select: none; 
+  pointer-events: none;
+  display: block;
+  /* Make sure it's big enough */
+  min-width: 2000px; 
+}
+
+@keyframes mapFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ===========================
+   WORLD MAP POLISH
+   =========================== */
+
+/* Header Tweaks */
+.map-title-group {
+  display: flex;
+  flex-direction: column;
+}
+.map-coords {
+  font-family: var(--font-mono);
+  color: #666;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+/* 1. THE VIGNETTE (Inner Shadow) */
+.map-vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 20;
+  
+  /* Creates a dark shadow ring around the viewport */
+  box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+  border: 4px solid var(--color-gold-dim);
+}
+
+/* 2. THE GRID (Tactical Overlay) */
+.map-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px; /* Grid square size */
+  opacity: 0.5;
+}
+
+/* 3. COMPASS ROSE */
+.compass-rose {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  color: var(--color-gold);
+  opacity: 0.8;
+  z-index: 30;
+  filter: drop-shadow(0 0 10px black);
+  pointer-events: none;
+}
+
+/* 4. ZOOM CONTROLS */
+.zoom-controls {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 50;
+  background: rgba(0,0,0,0.8);
+  padding: 10px;
+  border: 1px solid var(--color-gold-dim);
+  border-radius: 8px;
+}
+
+.zoom-controls button {
+  width: 40px;
+  height: 40px;
+  background: #111;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  font-family: var(--font-header);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-controls button:hover {
+  background: var(--color-gold);
+  color: black;
+}
+
+.zoom-label {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: #ccc;
+  font-size: 0.8rem;
+}
+
+/* Tweaks to the Map Image */
+.world-map-image {
+  /* Give it a slight sepia tone to match the theme */
+  filter: sepia(0.2) contrast(1.1); 
+  box-shadow: 0 0 50px black; /* Shadow behind the paper map */
+}
+
+.map-content {
+  /* Add a texture behind the map so dragging off-edge isn't just black void */
+  /* Using a repeating dark pattern */
+  background-color: #0c0c0c;
+  background-image: radial-gradient(#222 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ===========================
+   MAP ICONS & TRAVEL UI
+   =========================== */
+
+/* The SVG Layer sits on top of the image but below the icons */
+.map-svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.travel-line {
+  filter: drop-shadow(0 0 4px black);
+  animation: marchAnts 1s linear infinite;
+}
+
+@keyframes marchAnts {
+  to { stroke-dashoffset: -20; }
+}
+
+/* Icons */
+.map-icon {
+  position: absolute;
+  transform: translate(-50%, -50%); /* Center the icon on the coordinate */
+  z-index: 5;
+  color: white;
+  text-align: center;
+  pointer-events: none;
+}
+
+.map-icon i {
+  filter: drop-shadow(0 0 5px black);
+}
+
+.map-icon.player {
+  color: var(--color-gold);
+  text-shadow: 0 0 10px var(--color-gold);
+}
+
+.map-icon.ghost {
+  opacity: 0.6;
+  color: #aaa;
+}
+
+.icon-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  background: rgba(0,0,0,0.7);
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin-top: -5px;
+  white-space: nowrap;
+}
+
+/* TRAVEL PANEL (The Popup) */
+.travel-panel {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  
+  background: rgba(10, 10, 10, 0.95);
+  border: 2px solid var(--color-gold);
+  padding: 20px;
+  box-shadow: 0 0 50px black;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 300px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.travel-info {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #333;
+  padding-bottom: 15px;
+}
+
+.travel-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.travel-stat label {
+  color: #888;
+  font-size: 0.7rem;
+  margin-bottom: 5px;
+}
+
+.travel-stat span {
+  color: var(--color-gold);
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+}
+
+.travel-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.confirm-btn {
+  flex: 2;
+  background: var(--color-gold);
+  color: black;
+  border: none;
+  font-weight: bold;
+  padding: 12px;
+  cursor: pointer;
+  font-family: var(--font-header);
+  letter-spacing: 1px;
+}
+
+.confirm-btn:hover {
+  background: white;
+  box-shadow: 0 0 15px white;
+}
+
+.cancel-btn {
+  flex: 1;
+  background: transparent;
+  color: #888;
+  border: 1px solid #444;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  border-color: #888;
+  color: white;
+}
+
+/* ===========================
+   GAME CLOCK
+   =========================== */
+
+.game-clock {
+  position: fixed;
+  top: 5px;
+  
+  /* CENTER THE CLOCK */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* OLD POSITION (Delete these lines if present) */
+  /* right: 20px; */ 
+  
+  z-index: 6000; 
+  
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 30px; /* A bit wider looks nicer centered */
+  
+  background: rgba(10, 10, 10, 0.9);
+  border: 2px solid var(--color-gold-dim);
+  border-radius: 0 0 15px 15px; /* Round bottom corners only? Or keep pill shape */
+  border-radius: 50px; /* Pill shape looks best */
+  box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+  
+  font-family: var(--font-header);
+  transition: border-color 0.5s ease;
+}
+
+.game-clock.day {
+  border-color: var(--color-gold);
+}
+
+.game-clock.night {
+  border-color: #4a5d85; /* Moonlit Blue */
+}
+
+.clock-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gold);
+}
+
+.game-clock.night .clock-face {
+  color: #a0b0d0; /* Cool blue for night */
+}
+
+.icon-glow {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.clock-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Right align time */
+}
+
+.clock-time {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1;
+}
+
+.clock-date {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

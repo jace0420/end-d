@@ -3,8 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { triggerRoll } from "../utils/dice";
 import { getZMResponse, SESSION_PASSWORD } from "../utils/ai";
 import { SKILL_MAP, getModifier, SKILLS } from "../utils/rules";
+import { formatGameTime } from '../utils/time';
 
-export default function GameScreen({ character, onDamage }) {
+export default function GameScreen({ character, onDamage, onToggleMap, gameMinutes, onAdvanceTime }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [history, setHistory] = useState([]);
@@ -69,6 +70,20 @@ You finish your drink and stand up.`;
       cleanText = cleanText.replace(checkMatch[0], "").trim();
     }
 
+    // 3. DETECT TIME ADVANCE: [TIME: +30]
+    const timeMatch = cleanText.match(/\[TIME:\s*\+(\d+)\]/i);
+    if (timeMatch) {
+      const minutes = parseInt(timeMatch[1], 10);
+      
+      // Call the App function to update the clock
+      onAdvanceTime(minutes, 'minutes');
+
+      // Optional: Show a notification?
+      // showNotification("time", minutes, "MINUTES PASSED");
+      
+      cleanText = cleanText.replace(timeMatch[0], "").trim();
+    }
+
     return cleanText;
   };
 
@@ -83,16 +98,17 @@ You finish your drink and stand up.`;
     };
     const apiHistory = [...history, secretPrompt];
 
+    // GET TIME DATA
+    const timeData = formatGameTime(gameMinutes);
+
     try {
-      const rawText = await getZMResponse(apiHistory, character);
+      // PASS TIME DATA
+      const rawText = await getZMResponse(apiHistory, character, timeData);
       const cleanText = processAIResponse(rawText);
       setHistory((prev) => [...prev, { role: "ai", text: cleanText }]);
       setHasLooked(true);
     } catch {
-      setHistory((prev) => [
-        ...prev,
-        { role: "system", text: "Your eyes fail to adjust..." },
-      ]);
+      setHistory((prev) => [...prev, { role: "system", text: "Error..." }]);
     } finally {
       setIsLoading(false);
     }
@@ -111,8 +127,10 @@ You finish your drink and stand up.`;
       setInput("");
       setIsLoading(true);
 
+      const timeData = formatGameTime(gameMinutes);
+
       try {
-        const rawText = await getZMResponse(newHistory, character);
+        const rawText = await getZMResponse(newHistory, character, timeData);
         const cleanText = processAIResponse(rawText);
         setHistory((prev) => [...prev, { role: "ai", text: cleanText }]);
       } catch {
@@ -297,7 +315,8 @@ You finish your drink and stand up.`;
         <div className="action-grid">
           <button
             className="game-btn"
-            onClick={() => alert("Map System Not Implemented")}
+            onClick={onToggleMap}
+            data-sfx="/sfx/map.wav"
           >
             <i className="ra ra-compass ra-3x"></i>
             World Map
@@ -308,6 +327,7 @@ You finish your drink and stand up.`;
             onClick={handleLookAround}
             disabled={isLoading || hasLooked || activeRoll !== null}
             style={{ opacity: isLoading || hasLooked || activeRoll ? 0.5 : 1 }}
+            data-sfx="/sfx/look.wav"
           >
             <i className="ra ra-eyeball ra-3x"></i>
             {hasLooked ? "Looked" : "Look Around"}
@@ -316,6 +336,7 @@ You finish your drink and stand up.`;
           <button
             className="game-btn"
             onClick={() => alert("Opening Inventory...")}
+            data-sfx="/sfx/inventory.wav"
           >
             <i className="ra ra-kettlebell ra-3x"></i>
             Inventory
@@ -332,6 +353,7 @@ You finish your drink and stand up.`;
               background: activeRoll ? "rgba(212, 175, 55, 0.1)" : "#111",
               cursor: activeRoll ? "pointer" : "not-allowed",
             }}
+            data-sfx="/sfx/roll.wav"
           >
             <i
               className={`ra ra-dice-six ra-3x ${activeRoll ? "ra-spin" : ""}`}

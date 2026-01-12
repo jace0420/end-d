@@ -92,8 +92,6 @@ export default function MusicManager({ currentScreen, inTransition }) {
 
   // 2. Handle Screen Changes (Start New Music)
   useEffect(() => {
-    if (!hasInteracted) return;
-
     const audio = audioRef.current;
 
     // If we are NOT transitioning, check if we need to switch music
@@ -105,8 +103,25 @@ export default function MusicManager({ currentScreen, inTransition }) {
           audio.onended = null;
         }
       } else if (currentScreen === "game") {
-        // Start the playlist (utility handles audioRef)
-        playRandomIdle(audioRef, IDLE_PLAYLIST);
+        // Ensure volume baseline
+        try {
+          audio.volume = Math.min(BASE_VOLUME, audio.volume || BASE_VOLUME);
+        } catch (err) {
+          /* ignore */
+        }
+
+        // If the user has interacted, use the utility which handles onended chaining.
+        // If not, attempt a best-effort play (may be blocked by autoplay policies).
+        if (hasInteracted) {
+          playRandomIdle(audioRef, IDLE_PLAYLIST);
+        } else {
+          // Best-effort: pick a random track and try to play; if blocked, the unlock handler will start audio on interaction.
+          const randomIndex = Math.floor(Math.random() * IDLE_PLAYLIST.length);
+          audio.src = IDLE_PLAYLIST[randomIndex];
+          audio.loop = false;
+          audio.onended = () => playRandomIdle(audioRef, IDLE_PLAYLIST);
+          audio.play().catch(() => console.debug('Autoplay idle blocked (will start after interaction)'));
+        }
       }
     }
   }, [currentScreen, hasInteracted, inTransition, playTrack]);

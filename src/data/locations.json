@@ -1,0 +1,13 @@
+[
+  { "id": "daggerford", "name": "Daggerford", "x": 4937, "y": 2673, "type": "village" },
+  { "id": "baldurs_gate", "name": "Baldur's Gate", "x": 5351, "y": 4272, "type": "city" },
+  { "id": "waterdeep", "name": "Waterdeep", "x": 4608, "y": 2452, "type": "city" },
+  { "id": "neverwinter", "name": "Neverwinter", "x": 4065, "y": 1359, "type": "city" },
+  { "id": "candlekeep", "name": "Candlekeep", "x": 5351, "y": 4272, "type": "village" },
+  { "id": "beregost", "name": "Beregost", "x": 5305, "y": 4840, "type": "village" },
+  { "id": "friendly_arm_inn", "name": "Friendly Arm Inn", "x": 5394, "y": 4533, "type": "village" },
+  { "id": "nashkel", "name": "Nashkel", "x": 5687, "y": 5172, "type": "village" },
+  { "id": "phandalin", "name": "Phandalin", "x": 4343, "y": 1684, "type": "village" },
+  { "id": "triboar", "name": "Triboar", "x": 4755, "y": 1464, "type": "village" },
+  { "id": "silverymoon", "name": "Silverymoon", "x": 5664, "y": 1021, "type": "city" },
+]
