@@ -10,7 +10,7 @@ export default function MainMenu({ onStart }) {
       <h1 className="title">END&D</h1>
       <p className="subtitle">Endless Dungeons & Dragons</p>
       <button className="play-btn" onClick={onStart}>
-        ENTER THE REALM
+        PLAY
       </button>
     </div>
   );

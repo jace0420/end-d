@@ -1,76 +1,118 @@
-/* Add these to the bottom of App.css */
+/* src/App.css */
 
-.row {
-  display: flex;
-  gap: 20px;
+/* 1. Import the Celtic Font */
+@importYX url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+
+/* 2. Global Resets & Variables */
+:root {
+  --color-bg: #050505;
+  --color-gold: #d4af37;
+  --color-gold-dim: #8a7326;
+  --color-blood: #8a0303;
+  --color-blood-bright: #ff1111;
+  --font-celtic: 'Uncial Antiqua', serif;
+  --font-mono: 'Courier New', monospace;
 }
 
-.stat-controls {
+body {
+  background-color: var(--color-bg);
+  color: #e0e0e0;
+  font-family: var(--font-mono); /* Default to retro terminal style for stats */
+  margin: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 5px 0;
-}
-
-.stat-controls button {
-  padding: 5px 10px;
-  background-color: #333;
-  color: white;
-  border: 1px solid #555;
-  cursor: pointer;
-}
-
-.stat-controls button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-  width: 30px;
-}
-
-.stat-mod {
-  font-size: 0.9rem;
-  color: #888;
-}
-
-.points-display {
-  background-color: #222;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #444;
-  font-weight: bold;
-}
-
-/* Skills Grid */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  text-align: left;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-}
-
-.skill-item {
-  display: flex;
   align-items: center;
-  gap: 8px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+/* src/App.css - Partial Update */
+
+/* ===========================
+   MAIN MENU STYLES
+   =========================== */
+
+/* The Container - Now invisible, just used for centering */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+  width: 100%;
+  background: transparent; /* No more box background */
+  border: none; /* No more box border */
+  box-shadow: none; /* No more box shadow */
+}
+
+/* The Title */
+.title {
+  font-family: var(--font-celtic);
+  font-size: 7rem; /* Made it slightly bigger */
+  color: var(--color-gold);
+  margin: 0;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  
+  /* The Epic Glow Effect */
+  text-shadow: 
+    0 0 10px var(--color-blood), 
+    0 0 20px var(--color-blood), 
+    0 0 40px black;
+  
+  animation: pulse 3s infinite ease-in-out;
+}
+
+.subtitle {
+  font-family: var(--font-celtic);
+  font-size: 1.8rem;
+  color: #666; /* Darker grey to fade into the background more */
+  margin-top: -10px;
+  margin-bottom: 80px; /* More space between text and button */
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* The Play Button - Now a standalone monolith */
+.play-btn {
+  font-family: var(--font-celtic);
+  font-size: 2.2rem;
+  background-color: transparent; /* Transparent background */
+  color: var(--color-blood-bright);
+  border: 2px solid var(--color-blood); /* Red border */
+  padding: 20px 80px;
   cursor: pointer;
-  padding: 5px;
-  border: 1px solid transparent;
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  
+  /* A subtle glow to make it float */
+  box-shadow: 0 0 20px rgba(138, 3, 3, 0.3);
+  text-shadow: 0 0 5px var(--color-blood);
 }
 
-.skill-item:hover {
-  background-color: #1e1e1e;
+.play-btn:hover {
+  background-color: var(--color-blood);
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+  box-shadow: 
+    0 0 40px var(--color-blood), 
+    0 0 10px var(--color-gold);
+  transform: translateY(-2px) scale(1.05); /* Slight lift */
 }
 
-.skill-item.selected {
-  background-color: #2a2a2a;
-  border: 1px solid #444;
-  color: #81c784; /* Light green for selected */
+/* Animation for the Title */
+@keyframes pulse {
+  0% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
+  50% { text-shadow: 0 0 30px var(--color-blood-bright), 0 0 15px var(--color-gold); opacity: 1; }
+  100% { text-shadow: 0 0 15px var(--color-blood); opacity: 0.9; }
 }
